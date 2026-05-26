@@ -1,0 +1,24 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+
+# Uniswap v3 needs the optimizer ON (the pool won't compile without it),
+# and solc 0.7.6 targets the "istanbul" EVM (also accepted on Arbitrum).
+optimizer = true
+optimizer_runs = 100        # low runs => smaller bytecode (keeps the factory under EIP-170's 24KB limit)
+evm_version = "istanbul"
+via_ir = false
+bytecode_hash = "none"      # drop the metadata hash: smaller + deterministic bytecode (matches Uniswap's build)
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
+# Named networks — referenced as `forge ... --rpc-url arbitrum` etc.
+# Values are read from your .env file (see .env.example).
+[rpc_endpoints]
+arbitrum = "${ARBITRUM_RPC_URL}"
+arbitrum_sepolia = "${ARBITRUM_SEPOLIA_RPC_URL}"
+
+# Used by `forge verify-contract` to publish source on the block explorer (Phase 4).
+[etherscan]
+arbitrum_sepolia = { key = "${ARBISCAN_API_KEY}", chain = 421614 }
